@@ -19,32 +19,11 @@ WORKING_INI_IDM_FILE = 'id_mapper_custom.ini'
 
 
 class Singleton:
-    """
-    A non-thread-safe helper class to ease implementing singletons.
-    This should be used as a decorator -- not a metaclass -- to the
-    class that should be a singleton.
-
-    The decorated class can define one `__init__` function that
-    takes only the `self` argument. Other than that, there are
-    no restrictions that apply to the decorated class.
-
-    To get the singleton instance, use the `Instance` method. Trying
-    to use `__call__` will result in a `TypeError` being raised.
-
-    Limitations: The decorated class cannot be inherited from.
-
-    """
-
     def __init__(self, decorated):
         self._decorated = decorated
+        self._instance = None
 
     def instance(self):
-        """
-        Returns the singleton instance. Upon its first call, it creates a
-        new instance of the decorated class and calls its `__init__` method.
-        On all subsequent calls, the already created instance is returned.
-
-        """
         try:
             return self._instance
         except AttributeError:
@@ -163,8 +142,7 @@ class ConfigurationOptimiser():
                 restrictions[i] = int(restrictions[i])
             restrictions.append(1)
         else:
-            for i in [0, 1]:
-                restrictions[i] = float(restrictions[i])
+            restrictions = [float(restriction) for restriction in restrictions]
             restrictions.append((restrictions[1] - restrictions[0])/100)
         return restrictions
 
@@ -342,14 +320,6 @@ class IDMapperOptimiser(ConfigurationOptimiser):
     def low_result(self, res, best):
         return False
 
-    # def run2(self):
-    #     name1, offset1 = self.optimisation_elements[0]
-    #     name2, offset2 = self.optimisation_elements[1]
-    #     res, val = self.find_best_value2(name1, name2, offset1, offset2)
-    #     print("Best {} = {} with value = {}".format(res, val))
-    #     log("Best {} = {} with value = {}".format(res, val))
-    #     self.write_config("saved_config.ini")
-
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Settings selection for FeatureFinderCentroided algorithm')
@@ -372,58 +342,8 @@ def main():
     res = opt.get_result(output)
     print(res)
 
-    # opt.write_config(opt.working_ini_file)
-    # output = opt.run_program()
-    # res = opt.get_result(output)
-    # print(res)l
-    # log(res)
-
     # while True:
     #     opt.run()
-
-
-    # max_val2 = None
-    # max_output = None
-    # cur_changing = 'rt_tolerance'
-    # cur_changing2 = 'mz_tolerance'
-    #
-    # while val <= 80:
-    #     val2 = 0
-    #     while val2 <= 80:
-    #         # for elem in elements:
-    #         #     if elem.getAttribute('name') == cur_changing:
-    #         #         elem.setAttribute('value', str(val))
-    #         #     elif elem.getAttribute('name') == cur_changing2:
-    #         #         elem.setAttribute('value', str(val2))
-    #         #
-    #
-    #
-    #         # args = (config.ffc, '-in', config.mzml, '-out', FFC_OUTPUT_FILE, '-ini', INI_OUTPUT_FILE)
-    #         # output = run_program(args)
-    #
-    #         args = (config.idm, '-in', DEFAULT_FFC_OUTPUT_FILE, '-out', DEFAULT_IDM_OUTPUT_FILE, '-id', config.idxml,
-    #                 '-ini', DEFAULT_INI_OUTPUT_FILE)
-    #         output = run_program(args)
-    #
-    #         m = re.search(r"Peptides assigned to exactly one feature: (\d*)", output)
-    #         if m:
-    #             res = int(m.group(1))
-    #             print(cur_changing, val, val2, res)
-    #             if max_res < res:
-    #                 max_res = res
-    #                 max_val = val
-    #                 max_val2 = val2
-    #                 max_output = output
-    #             print("Max:", max_res, "with val", max_val, 'with val2', max_val2)
-    #         else:
-    #             print("Fail")
-    #
-    #         val2 += 1
-    #     val += 1
-    #
-    # print('max result = {}, with {} = {}, {} = {}'.format(max_res, cur_changing, max_val, cur_changing2, max_val2))
-    # print(max_output)
-
 
 if __name__ == '__main__':
     main()
