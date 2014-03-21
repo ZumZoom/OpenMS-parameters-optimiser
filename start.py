@@ -24,9 +24,9 @@ class Singleton:
         self._instance = None
 
     def instance(self):
-        try:
+        if self._instance is not None:
             return self._instance
-        except AttributeError:
+        else:
             self._instance = self._decorated()
             return self._instance
 
@@ -337,13 +337,13 @@ def main():
     opt = FeatureFinderOptimiser(config)
     # opt = IDMapperOptimiser(config)
 
-    opt.write_config(opt.working_ini_file)
-    output = opt.run_program()
-    res = opt.get_result(output)
-    print(res)
+    # opt.write_config(opt.working_ini_file)
+    # output = opt.run_program()
+    # res = opt.get_result(output)
+    # print(res)
 
-    # while True:
-    #     opt.run()
+    while True:
+        opt.run()
 
 if __name__ == '__main__':
     main()
