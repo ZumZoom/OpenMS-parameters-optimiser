@@ -1,0 +1,37 @@
+### PARAMETER FILE
+
+intensity_bins 									"-algorithm:intensity:bins "									i (1, 100)
+mass_trace_mz_tolerance							"-algorithm:mass_trace:mz_tolerance "							r (0, 0.1)
+mass_trace_min_spectra							"-algorithm:mass_trace:min_spectra "							i (1, 30)
+mass_trace_max_missing							"-algorithm:mass_trace:max_missing "							i (0, 5)
+mass_trace_slope_bound							"-algorithm:mass_trace:slope_bound "							r (0, 0.1)
+isotopic_pattern_charge_low 					"-algorithm:isotopic_pattern:charge_low "						i (1, 3)
+isotopic_pattern_charge_high					"-algorithm:isotopic_pattern:charge_high "						i (3, 5)
+isotopic_pattern_mz_tolerance					"-algorithm:isotopic_pattern:mz_tolerance "						r (0, 0.1)
+isotopic_pattern_intensity_percentage			"-algorithm:isotopic_pattern:intensity_percentage "				r (0, 100)
+isotopic_pattern_intensity_percentage_optional	"-algorithm:isotopic_pattern:intensity_percentage_optional "	r (0.0, 100)
+isotopic_pattern_optional_fit_improvement		"-algorithm:isotopic_pattern:optional_fit_improvement "			r (0.0, 25)
+isotopic_pattern_mass_window_width				"-algorithm:isotopic_pattern:mass_window_width "				r (1, 200)
+
+# isotopic_pattern_abundance_12C					"-algorithm:isotopic_pattern:abundance_12C "					r (0.0, 100.0)
+# isotopic_pattern_abundance_14N					"-algorithm:isotopic_pattern:abundance_14N "					r (0.0, 100.0)
+
+seed_min_score									"-algorithm:seed:min_score "									r (0, 1)
+fit_epsilon_abs									"-algorithm:fit:epsilon_abs "									r (0, 0.001)
+fit_epsilon_rel									"-algorithm:fit:epsilon_rel "									r (0, 0.001)
+
+# fit_max_iterations								"-algorithm:fit:max_iterations "								i (1, 1000)
+
+feature_min_score								"-algorithm:feature:min_score "									r (0, 1)
+feature_min_isotope_fit							"-algorithm:feature:min_isotope_fit "							r (0, 1)
+feature_min_trace_score							"-algorithm:feature:min_trace_score "							r (0, 1)
+feature_min_rt_span								"-algorithm:feature:min_rt_span "								r (0, 1)
+feature_max_rt_span								"-algorithm:feature:max_rt_span "								r (0.5, 100)
+feature_rt_shape								"-algorithm:feature:rt_shape "									c (symmetric,asymmetric)
+feature_max_intersection						"-algorithm:feature:max_intersection "							r (0, 1)
+feature_reported_mz								"-algorithm:feature:reported_mz "								c (maximum,average,monoisotopic)
+
+### for user-specified seeds
+# user-seed_rt_tolerance							"-algorithm:user-seed:rt_tolerance "							r (0, 100)
+# user-seed_mz_tolerance							"-algorithm:user-seed:mz_tolerance "							r (0, 100)
+# user-seed_min_score								"-algorithm:user-seed:min_score "								r (0, 1)

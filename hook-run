@@ -1,0 +1,55 @@
+#!/bin/bash
+###############################################################################
+# PARAMETERS:
+# $1 is the instance name  
+# $2 is the candidate number
+# The rest ($* after `shift 2') are parameters to run ACOTSP
+#
+# RETURN VALUE:
+# This hook should print a single numerical value (the value to be minimized)
+###############################################################################
+
+## Initial files
+FFC="FeatureFinderCentroided"
+IDM="IDMapper"
+ID_IDM="../full.idXML"
+EXTRACT_RES="python ../extract.py"
+
+TMP_FXML="tmp.featureXML"
+OUT_IDM="out_IDM.featureXML"
+
+# The instance name and the candidate id are the first parameters
+INSTANCE="../$1"
+CANDIDATE=$2
+
+SET_THREADS="-threads 12"
+
+FFC_PARAMS="-in $INSTANCE -out ${TMP_FXML} ${SET_THREADS}"
+IDM_PARAMS="-in ${TMP_FXML} -out ${OUT_IDM} -id ${ID_IDM} ${SET_THREADS}"
+
+# All other parameters are the candidate parameters to be passed to ACOTSP
+shift 2 || exit 1
+CAND_PARAMS=$*
+
+STDOUT="c${CANDIDATE}.stdout"
+STDERR="c${CANDIDATE}.stderr"
+
+$FFC ${FFC_PARAMS} ${CAND_PARAMS} 1> $STDOUT 2> $STDERR
+$IDM ${IDM_PARAMS} 1> $STDOUT 2> $STDERR
+
+error() {
+    echo "error: $@" >&2
+    exit 1
+}
+
+if [ ! -s "${STDOUT}" ]; then
+    error "${STDOUT}: No such file or directory"
+else
+	$EXTRACT_RES "${STDOUT}"
+fi
+
+# We are done with our duty. Clean files and exit with 0 (no error).
+rm -f "${STDOUT}" "${STDERR}"
+rm -f best.* stat.* cmp.*
+exit 0
+
