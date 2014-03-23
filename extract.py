@@ -14,8 +14,8 @@ for line in lines:
     m = features.search(line)
     if m:
         val = int(m.group(1))
-		print(-val)
-		break
+        print(-val)
+        break
 
 
 

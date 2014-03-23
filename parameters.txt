@@ -29,7 +29,8 @@ feature_min_rt_span								"-algorithm:feature:min_rt_span "								r (0, 1)
 feature_max_rt_span								"-algorithm:feature:max_rt_span "								r (0.5, 100)
 feature_rt_shape								"-algorithm:feature:rt_shape "									c (symmetric,asymmetric)
 feature_max_intersection						"-algorithm:feature:max_intersection "							r (0, 1)
-feature_reported_mz								"-algorithm:feature:reported_mz "								c (maximum,average,monoisotopic)
+# feature_reported_mz								"-algorithm:feature:reported_mz "								c (maximum,average,monoisotopic)
+feature_reported_mz								"-algorithm:feature:reported_mz "								c (monoisotopic)
 
 ### for user-specified seeds
 # user-seed_rt_tolerance							"-algorithm:user-seed:rt_tolerance "							r (0, 100)
