@@ -50,7 +50,7 @@ digits <- 5
 
 ## A value of 0 silences all debug messages. Higher values provide
 ## more verbose debug messages.
-# debugLevel <- 1
+debugLevel <- 1
 
 ## Number of iterations of Race. Do not use something else than the
 ## default (that is, the dynamic value) unless you know exactly what

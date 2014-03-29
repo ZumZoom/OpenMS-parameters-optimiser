@@ -43,9 +43,10 @@ error() {
 }
 
 if [ ! -s "${STDOUT}" ]; then
-    error "${STDOUT}: No such file or directory"
+#    error "${STDOUT}: No such file or directory"
+    echo 0
 else
-	$EXTRACT_RES "${STDOUT}"
+    $EXTRACT_RES "${STDOUT}"
 fi
 
 # We are done with our duty. Clean files and exit with 0 (no error).
