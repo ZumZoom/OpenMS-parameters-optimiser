@@ -41,27 +41,25 @@ def main():
     # print parameters
     with open("parameters", "w") as f:
         for i in lst:
-            f.write("{} {} {} {}\n".format(i[0].split(':')[-2] + ':' + i[0].split(':')[-1],
+            f.write("{} {} {} {}\n".format(i[0].split(':')[-2] + '_' + i[0].split(':')[-1],
                                            '"-{} "'.format(i[0]), i[1], i[2]))
     #print candidates
     with open("candidates", "w") as f:
         for i in lst:
-            f.write("{} ".format(i[0].split(':')[-2] + ':' + i[0].split(':')[-1]))
+            f.write("{} ".format(i[0].split(':')[-2] + '_' + i[0].split(':')[-1]))
         f.write("\n")
         for i in lst:
             f.write("{} ".format(i[3]))
         f.write("\n")
 
     for t in range(2, len(sys.argv)):
+        root = ET.parse(sys.argv[t]).getroot()
         lst = []
         for i in rec(root.find('NODE').find('NODE').find('NODE')):
             lst.append(('algorithm:' + i[0], i[1], i[2], i[3]))
 
         #print candidates
         with open("candidates", "a") as f:
-            for i in lst:
-                f.write("{} ".format(i[0].split(':')[-2] + ':' + i[0].split(':')[-1]))
-            f.write("\n")
             for i in lst:
                 f.write("{} ".format(i[3]))
             f.write("\n")
