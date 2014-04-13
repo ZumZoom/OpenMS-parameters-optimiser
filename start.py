@@ -177,6 +177,7 @@ class ConfigurationOptimiser():
 #        other = []
 
         results = {}
+        results[val] = res
 
         def one_search(low, up, step):
             nonlocal best_res
@@ -328,7 +329,7 @@ class FeatureFinderOptimiser(ConfigurationOptimiser):
         return res['value'] > best['value'] or (res['value'] == best['value'] and res['time'] + 3 < best['time'])
 
     def low_result(self, res, best):
-        return res['value'] < 0.99 * best['value']
+        return res['value'] < 0.9 * best['value']
 
     def pre_loading(self):
         pass
@@ -360,7 +361,7 @@ class IDMapperOptimiser(ConfigurationOptimiser):
         return res > best
 
     def low_result(self, res, best):
-        return False
+        return res < 0.9 * best
 
     def pre_loading(self):
         for i in range(len(self.config.mzml)):
