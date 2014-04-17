@@ -122,7 +122,7 @@ class ConfigurationOptimiser():
             output = p.stdout.read().decode()
             if verbose:
                 log(output)
-                print(output)
+                # print(output)
             if res != 0:
                 log("Failed to run program, tries left {}".format(tries))
                 print("Failed to run program, tries left {}".format(tries))
@@ -201,12 +201,13 @@ class ConfigurationOptimiser():
                         print("fail: {}".format(str(e)))
                         log("fail: {}".format(str(e)))
 
-                results[val] = res
+                if res is not None:
+                    results[val] = res
 
                 print("Result = {} with value = {}".format(res, val))
                 log("Result = {} with value = {}".format(res, val))
 
-                if self.cmp_result(res, best_res):
+                if res is not None and self.cmp_result(res, best_res):
                     best_res = res
                     best_val = val
 
@@ -228,16 +229,25 @@ class ConfigurationOptimiser():
 #        if len(args) == 0:
         self.lower_bound = restrictions[0]
         self.upper_bound = restrictions[1]
-        upper = False
         for val, res in sorted(results.items()):
             print(val, res)
-            if upper:
-                if not self.low_result(res, best_res):
-                    self.upper_bound = val
-            else:
-                if not self.low_result(res, best_res):
-                    self.lower_bound = val
-                    upper = True
+        
+        candidate = restrictions[0]
+        for val, res in sorted(results.items()):
+            if not self.low_result(res, best_res):
+                self.lower_bound = candidate
+                break
+            candidate = val
+
+        candidate = restrictions[1]
+        for val, res in sorted(results.items())[::-1]:
+            if not self.low_result(res, best_res):
+                self.upper_bound = candidate
+                break
+            candidate = val
+
+        print("restrictions: {}, {}".format(self.lower_bound, self.upper_bound))
+        log("restrictions: {}, {}".format(self.lower_bound, self.upper_bound))
 
         self.set_attribute(name, 'restrictions', '{}:{}'.format(self.lower_bound, self.upper_bound), offset)
         self.set_attribute(name, 'value', best_val, offset)
@@ -329,7 +339,7 @@ class FeatureFinderOptimiser(ConfigurationOptimiser):
         return res['value'] > best['value'] or (res['value'] == best['value'] and res['time'] + 3 < best['time'])
 
     def low_result(self, res, best):
-        return res['value'] < 0.9 * best['value']
+        return res['value'] < 0.99 * best['value']
 
     def pre_loading(self):
         pass
@@ -361,13 +371,13 @@ class IDMapperOptimiser(ConfigurationOptimiser):
         return res > best
 
     def low_result(self, res, best):
-        return res < 0.9 * best
+        return res < 0.99 * best
 
     def pre_loading(self):
         for i in range(len(self.config.mzml)):
             args = (self.config.ffc, '-in', self.config.mzml[i], '-out', str(i)+'_'+DEFAULT_FFC_OUTPUT_FILE,
                    '-ini', WORKING_INI_FFC_FILE)
-            self.run_program(args)
+            self.run_program(args, False)
 
     def add_res(self, res1, res2):
         return res1 + res2
