@@ -1,5 +1,6 @@
 import re
 import sys
+from math import floor
 
 __author__ = 'zumzoom'
 
@@ -19,7 +20,7 @@ for line in lines:
         continue
     m = timing_s.search(line)
     if m:
-        t = int(m.group(1))
+        t = int(floor(float(m.group(1))))
         continue
     m = timing_s.search(line)
     if m:

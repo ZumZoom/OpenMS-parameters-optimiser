@@ -29,13 +29,18 @@ IDM_PARAMS="-in ${TMP_FXML} -out ${OUT_IDM} -id ${ID_IDM} ${SET_THREADS}"
 
 # All other parameters are the candidate parameters to be passed to ACOTSP
 shift 2 || exit 1
+IDM_CAND_PARAMS="$1 $2 $3 $4"
+shift 4 || exit 1
 CAND_PARAMS=$*
+
 
 STDOUT="c${CANDIDATE}.stdout"
 STDERR="c${CANDIDATE}.stderr"
 
-$FFC ${FFC_PARAMS} ${CAND_PARAMS} 1 > $STDOUT 2 > $STDERR
-$IDM ${IDM_PARAMS} 1 >> $STDOUT 2 >> $STDERR
+{
+$FFC ${FFC_PARAMS} ${CAND_PARAMS}
+} 1> $STDOUT 2> $STDERR
+$IDM ${IDM_PARAMS} ${IDM_CAND_PARAMS} >> $STDOUT 2> $STDERR
 
 error() {
     echo "error: $@" >&2
