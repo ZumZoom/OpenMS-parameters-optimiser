@@ -16,7 +16,7 @@ execDir <- "tuning"
 
 ## Folder where tuning instances are located, either absolute or
 ## relative to working directory.
-instanceDir <- "instances2"
+instanceDir <- "instances3"
 
 ## File with a list of instances and (optionally) parameters.
 ## If empty or NULL, does not use a file.
@@ -46,7 +46,7 @@ maxExperiments <- 10000
 
 ## Indicates the number of decimal places to be considered for the
 ## real parameters.
-digits <- 3
+digits <- 5
 
 ## A value of 0 silences all debug messages. Higher values provide
 ## more verbose debug messages.
