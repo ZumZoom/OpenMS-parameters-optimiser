@@ -1,8 +1,18 @@
 import re
+import sys
 
 __author__ = 'zumzoom'
 
-FILE_NAME = "for_test.mzML"
+FILE_NAME = ""
+OUTPUT = "."
+parts = 50
+
+if(len(sys.argv) != 4):
+    print("Usage: INPUT_FILE OUTPUT_DIT PARTS_NUMBER")
+else:
+    FILE_NAME = sys.argv[1]
+    OUTPUT = sys.argv[2] + "/{}.mzML"
+    parts = int(sys.argv[3])
 
 with open(FILE_NAME) as f:
     lines = f.readlines()
@@ -14,12 +24,11 @@ spectrum_list = '\t\t<spectrumList count="{}" defaultDataProcessingRef="dp_sp_0"
 regex = re.compile('\t\t<spectrumList count="(\d*)" defaultDataProcessingRef="dp_sp_0">')
 
 prefix_done = False
-parts = 100
 count = 0
 inside_count = 0
 sz = 0
 
-f = open('{}.mzML'.format(count), "w")
+f = open(OUTPUT.format(count), "w")
 
 for line in lines:
     if count == parts:
@@ -48,7 +57,7 @@ for line in lines:
                 f.close()
                 count += 1
                 if count != parts:
-                    f = open('{}.mzML'.format(count), "w")
+                    f = open(OUTPUT.format(count), "w")
                     for pref in prefix:
                         f.write(pref)
                     if count + 1 != parts:
