@@ -1,14 +1,10 @@
 import re
 import sys
 
-__author__ = 'zumzoom'
 
-FILE_NAME = ""
-OUTPUT = "."
-parts = 50
-
-if(len(sys.argv) != 4):
-    print("Usage: INPUT_FILE OUTPUT_DIT PARTS_NUMBER")
+if len(sys.argv) != 4:
+    print("Usage: INPUT_FILE OUTPUT_DIT SIZE_OF_FILE")
+    sys.exit(1)
 else:
     FILE_NAME = sys.argv[1]
     OUTPUT = sys.argv[2] + "/{}.mzML"
