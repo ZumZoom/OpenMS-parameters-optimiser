@@ -1,7 +1,7 @@
 param_optimiser
 ===============
 
-Утилита для поиска оптимальных параметров для FeatureFinderCentroided и IDMapper из Open MS
+Поиск оптимальных параметров для FeatureFinderCentroided и IDMapper из Open MS
 
 ####**param_optimiser.py**
 
