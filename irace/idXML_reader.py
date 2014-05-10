@@ -5,8 +5,8 @@ import time
 
 
 def get_identity(peptide):
-    ret = str(peptide.attrib)
-    hits = sorted(str(hit.attrib) for hit in peptide.iter('PeptideHit'))
+    ret = peptide.get('RT') + peptide.get('MZ')
+    hits = sorted((float(hit.get('score')), hit.get('sequence')) for hit in peptide.iter('PeptideHit'))
     ret += str(hits)
     return ret
 
@@ -14,7 +14,7 @@ def get_identity(peptide):
 def erase_peptides(file_name, peptides):
     assert '.idXML' in file_name
     tree = ET.parse(file_name)
-    root = tree.getroot().find('IdXML')
+    root = tree.getroot().find('IdentificationRun')
     erased = 0
     for peptide in root.findall('PeptideIdentification'):
         identity = get_identity(peptide)
@@ -147,10 +147,11 @@ def main():
     features_to_delete, peptides_to_delete = get_data_to_delete(sys.argv[1])
     features = {feature.get("id"): feature for feature in features_to_delete}
 
+    print("Found features and peptides to delete, modified initial file")
     print("Elapsed {} seconds".format(time.time() - start))
 
-    for feat in features.keys():
-        print(feat)
+    # for feat in features.keys():
+    #     print(feat)
 
 ####### save new features
 
@@ -172,6 +173,7 @@ def main():
             f.write(ET.tostring(feature))
         f.write(b'\n</featurelist>')
 
+    print("New features saved")
     print("Elapsed {} seconds".format(time.time() - start))
 
 #######
@@ -180,6 +182,7 @@ def main():
 
     erase_peptides(sys.argv[2], peptides_to_delete)
 
+    print("Peptides erased")
     print("Elapsed {} seconds".format(time.time() - start))
 
 #######
@@ -188,6 +191,7 @@ def main():
 
     erase_features(sys.argv[3], features.keys())
 
+    print("Features erased")
     print("Elapsed {} seconds".format(time.time() - start))
 
 ####### create new optimal featureXML
@@ -200,10 +204,12 @@ def main():
     for feature in feature_list.findall('feature'):
         feature_name = feature.get("id")
         if feature_name in features.keys():
+            # print("I'm doing it!")
             feature_list.remove(feature)
             feature_list.append(features[feature_name])
     tree.write('optimal.featureXML')
 
+    print("New optimal.featureXML created")
     print("Elapsed {} seconds".format(time.time() - start))
 
 if __name__ == '__main__':
