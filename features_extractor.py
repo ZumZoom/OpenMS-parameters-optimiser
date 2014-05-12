@@ -56,7 +56,7 @@ def count_peptides(file_name):
     print("Unassigned peptides: %d" % len(peptides))
 
 
-def get_data_to_delete(file_name, clean=False):
+def get_data_to_delete(file_name, clean=False, verbose=False):
     tree = ET.parse(file_name)
     root = tree.getroot()
     peptides = {}
@@ -98,8 +98,9 @@ def get_data_to_delete(file_name, clean=False):
     if clean:
         tree.write(file_name)
 
-    print("Peptides assigned to exactly one feature: %d" % (len(peptides) - len(duplicates)))
-    print("Peptides assigned to multiply features: %d" % len(duplicates))
+    if verbose:
+        print("Peptides assigned to exactly one feature: %d" % (len(peptides) - len(duplicates)))
+        print("Peptides assigned to multiply features: %d" % len(duplicates))
 
     features_to_delete = set()
 
@@ -147,12 +148,13 @@ def get_data_to_delete(file_name, clean=False):
 
         peptides_to_delete |= peptides
 
-    print("\t no ID: %d" % len(empty))
-    print("\t single ID: %d" % len(single))
-    print("\t identical IDs: %d" % len(identical))
-    print("\t divergent IDs: %d" % len(divergent))
-    print("Features to delete: %d" % len(features_to_delete))
-    print("Peptides to delete: %d" % len(peptides_to_delete))
+    if verbose:
+        print("\t no ID: %d" % len(empty))
+        print("\t single ID: %d" % len(single))
+        print("\t identical IDs: %d" % len(identical))
+        print("\t divergent IDs: %d" % len(divergent))
+        print("Features to delete: %d" % len(features_to_delete))
+        print("Peptides to delete: %d" % len(peptides_to_delete))
 
     return features_to_delete, peptides_to_delete
 
