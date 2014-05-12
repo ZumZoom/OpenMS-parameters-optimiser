@@ -56,7 +56,7 @@ def count_peptides(file_name):
     print("Unassigned peptides: %d" % len(peptides))
 
 
-def get_data_to_delete(file_name):
+def get_data_to_delete(file_name, clean=False):
     tree = ET.parse(file_name)
     root = tree.getroot()
     peptides = {}
@@ -72,11 +72,12 @@ def get_data_to_delete(file_name):
         for peptide in feature.findall('PeptideIdentification'):
             identity = get_identity(peptide)
 
-            if identity in cur_peptides:
-                feature.remove(peptide)
-                continue
-            else:
-                cur_peptides.add(identity)
+            if clean:
+                if identity in cur_peptides:
+                    feature.remove(peptide)
+                    continue
+                else:
+                    cur_peptides.add(identity)
 
             if identity in peptides.keys():
                 if peptides[identity] != feature_name:
@@ -87,13 +88,15 @@ def get_data_to_delete(file_name):
             else:
                 peptides[identity] = feature_name
 
-    for peptide in root.findall('UnassignedPeptideIdentification'):
-        identity = get_identity(peptide)
-        if identity in peptides:
-            root.remove(peptide)
+    if clean:
+        for peptide in root.findall('UnassignedPeptideIdentification'):
+            identity = get_identity(peptide)
+            if identity in peptides:
+                root.remove(peptide)
 
     # clear a little
-    tree.write(file_name)
+    if clean:
+        tree.write(file_name)
 
     print("Peptides assigned to exactly one feature: %d" % (len(peptides) - len(duplicates)))
     print("Peptides assigned to multiply features: %d" % len(duplicates))
@@ -160,7 +163,7 @@ def features_extractor(out_file, id_file, feature_file):
     assert '.featureXML' in feature_file
     start = time.time()
 
-    features_to_delete, peptides_to_delete = get_data_to_delete(out_file)
+    features_to_delete, peptides_to_delete = get_data_to_delete(out_file, True)
     features = {feature.get("id"): feature for feature in features_to_delete}
 
     print("Found features and peptides to delete, modified initial file")
