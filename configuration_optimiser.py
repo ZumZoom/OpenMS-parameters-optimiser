@@ -3,6 +3,8 @@ import abc
 import re
 from logger import log
 from constants import *
+from timer import Timer
+
 __author__ = 'zumzoom'
 
 
@@ -116,9 +118,14 @@ class ConfigurationOptimiser():
         print("Trying with default: {} = {}...".format(name, val))
         res = None
         for i in range(len(self.config.mzml)):
+            t = Timer()
+            t.start()
             output = self.run_program(self.get_args(i), False)
+            print('run_program took %.2f sec' % t.get())
             try:
+                t.start()
                 tmp_res = self.get_result(output, i)
+                print('get_result took %.2f sec' % t.get())
                 res = self.add_res(res, tmp_res) if res is not None else tmp_res
             except Exception as e:
                 log("fail: {}".format(str(e)))
@@ -148,9 +155,15 @@ class ConfigurationOptimiser():
                 log("Trying {} = {}...".format(name, val))
                 res = None
                 for i in range(len(self.config.mzml)):
+                    t = Timer()
+                    t.start()
                     output = self.run_program(self.get_args(i), False)
+                    print('run_program took %.2f sec' % t.get())
+
                     try:
+                        t.start()
                         tmp_res = self.get_result(output, i)
+                        print('get_result took %.2f sec' % t.get())
                         res = self.add_res(res, tmp_res) if res is not None else tmp_res
                     except Exception as e:
                         print("fail: {}".format(str(e)))
