@@ -31,10 +31,12 @@ class ConfigurationOptimiser():
     def parse_restrictions(elem):
         elem_type = elem.getAttribute('type')
         restrictions = []
+        value = None
         if elem_type == 'string':
             restrictions = re.split(',', elem.getAttribute('restrictions'))
         elif elem_type == 'int' or elem_type == 'double':
             restrictions = re.split(':', elem.getAttribute('restrictions'))
+            value = float(elem.getAttribute('value'))
         elif elem_type == 'input-file' or elem_type == 'output-file':
             pass
         else:
@@ -42,6 +44,12 @@ class ConfigurationOptimiser():
 
         if len(restrictions) > 0 and restrictions[-1] == '':
             restrictions.pop()
+
+        if elem_type == 'int' or elem_type == 'double':
+            if len(restrictions) == 0:
+                restrictions.append(0)
+            if len(restrictions) == 1:
+                restrictions.append(value * 100)
 
         return restrictions
 
