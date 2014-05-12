@@ -61,6 +61,10 @@ def get_data_to_delete(file_name):
     root = tree.getroot()
     peptides = {}
     duplicates = {}
+    divergent = {}
+    identical = {}
+    single = {}
+    empty = {}
 
     for feature in root.iter('feature'):
         feature_name = feature.get("id")
@@ -99,6 +103,7 @@ def get_data_to_delete(file_name):
     for feature in root.iter('feature'):
         local_peptides = set()
         good_feature = True
+        peptides_count = 0
         for peptide in feature.iter('PeptideIdentification'):
             best_hit = None
             best_score = -1.0
@@ -114,11 +119,20 @@ def get_data_to_delete(file_name):
             seq = re.sub(r"\(.*?\)", "", best_hit.get("sequence"))
             identity = (seq, best_hit.get("charge"))
             local_peptides.add(identity)
+            peptides_count += 1
+
+        if peptides_count > 1:
+            if len(local_peptides) > 1:
+                divergent[feature_name] = local_peptides
+            elif len(local_peptides) == 1:
+                identical[feature_name] = local_peptides
+        elif peptides_count == 1:
+            single[feature_name] = local_peptides
+        else:
+            empty[feature_name] = local_peptides
 
         if good_feature and len(local_peptides) == 1:
             features_to_delete.add(feature)
-
-    print("Features to delete: %d" % len(features_to_delete))
 
     peptides_to_delete = set()
     for feature in features_to_delete:
@@ -128,30 +142,28 @@ def get_data_to_delete(file_name):
             peptides.add(peptide_id)
 
         peptides_to_delete |= peptides
+
+    print("\t no ID: %d" % len(empty))
+    print("\t single ID: %d" % len(single))
+    print("\t identical IDs: %d" % len(identical))
+    print("\t divergent IDs: %d" % len(divergent))
+    print("Features to delete: %d" % len(features_to_delete))
     print("Peptides to delete: %d" % len(peptides_to_delete))
 
     return features_to_delete, peptides_to_delete
 
 
-def main():
-    # argv[1] - готовый featureXML
-    # argv[2] - исходный idXML
-    # argv[3] - исходный featureXML
-
-    assert '.featureXML' in sys.argv[1]
-    assert '.idXML' in sys.argv[2]
-    assert '.featureXML' in sys.argv[3]
-
+def features_extractor(out_file, id_file, feature_file):
+    assert '.featureXML' in out_file
+    assert '.idXML' in id_file
+    assert '.featureXML' in feature_file
     start = time.time()
 
-    features_to_delete, peptides_to_delete = get_data_to_delete(sys.argv[1])
+    features_to_delete, peptides_to_delete = get_data_to_delete(out_file)
     features = {feature.get("id"): feature for feature in features_to_delete}
 
     print("Found features and peptides to delete, modified initial file")
     print("Elapsed {} seconds".format(time.time() - start))
-
-    # for feat in features.keys():
-    #     print(feat)
 
 ####### save new features
 
@@ -180,7 +192,7 @@ def main():
 
     start = time.time()
 
-    erase_peptides(sys.argv[2], peptides_to_delete)
+    erase_peptides(id_file, peptides_to_delete)
 
     print("Peptides erased")
     print("Elapsed {} seconds".format(time.time() - start))
@@ -189,7 +201,7 @@ def main():
 
     start = time.time()
 
-    erase_features(sys.argv[3], features.keys())
+    erase_features(feature_file, features.keys())
 
     print("Features erased")
     print("Elapsed {} seconds".format(time.time() - start))
@@ -198,19 +210,24 @@ def main():
 
     start = time.time()
 
-    tree = ET.parse(sys.argv[1])
+    tree = ET.parse(out_file)
     root = tree.getroot()
     feature_list = root.find('featureList')
     for feature in feature_list.findall('feature'):
         feature_name = feature.get("id")
         if feature_name in features.keys():
-            # print("I'm doing it!")
             feature_list.remove(feature)
             feature_list.append(features[feature_name])
+    for feature in prev_features:
+        feature_list.append(feature)
+
     tree.write('optimal.featureXML')
 
     print("New optimal.featureXML created")
     print("Elapsed {} seconds".format(time.time() - start))
 
 if __name__ == '__main__':
-    main()
+    # argv[1] - готовый featureXML
+    # argv[2] - исходный idXML
+    # argv[3] - исходный featureXML
+    features_extractor(sys.argv[1], sys.argv[2], sys.argv[3])
