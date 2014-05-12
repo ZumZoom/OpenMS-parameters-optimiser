@@ -1,4 +1,5 @@
 import xml.dom.minidom
+import re
 from configuration_optimiser import ConfigurationOptimiser
 from id_mapper_optimiser import IDMapperOptimiser
 from constants import *
