@@ -19,7 +19,7 @@ class IDMapperOptimiser(ConfigurationOptimiser):
                 self.config.idxml, '-ini', WORKING_INI_IDM_FILE)
 
     def get_result(self, output, i):
-        features, peptides = get_data_to_delete(str(i)+'_'+DEFAULT_FFC_OUTPUT_FILE)
+        features, peptides = get_data_to_delete(DEFAULT_IDM_OUTPUT_FILE)
         return len(peptides)
 
     def cmp_result(self, res, best):

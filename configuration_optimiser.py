@@ -169,10 +169,13 @@ class ConfigurationOptimiser():
 
                     if self.get_element(name, offset).getAttribute('type') != 'int' and depth < MAX_REC_DEPTH:
                         print("We need to go deeper with low = {}, high = {}, step = {}"
-                              "".format(val - step * 0.8, val + step * 0.8, step / 5))
+                              "".format(max(val - step * 0.8, low + step / 5),
+                                        min(val + step * 0.8, up - step / 5), step / 5))
                         log("We need to go deeper with low = {}, high = {}, step = {}"
-                            "".format(val - step * 0.8, val + step * 0.8, step / 5))
-                        one_search(val - step, val + step, step / 5, depth + 1)
+                            "".format(max(val - step * 0.8, low + step / 5),
+                                      min(val + step * 0.8, up - step / 5), step / 5))
+                        one_search(max(val - step * 0.8, low + step / 5), min(val + step * 0.8, up - step / 5),
+                                   step / 5, depth + 1)
                     # other_best = other
 
                 # print("Best = {} with value = {}".format(best_res, best_val))

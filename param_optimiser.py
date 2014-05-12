@@ -27,11 +27,10 @@ def parse_args():
 
 def main():
     config = parse_args()
-    opt = FeatureFinderOptimiser(config)
-    opt1 = IDMapperOptimiser(config)
-
     shutil.copy(config.ffcini, SAVED_INI_FFC_FILE)
     shutil.copy(config.idmini, SAVED_INI_IDM_FILE)
+    opt = FeatureFinderOptimiser(config)
+    opt1 = IDMapperOptimiser(config)
 
     # opt.write_config(opt.working_ini_file)
     # output = opt.run_program()
