@@ -16,7 +16,7 @@ class FeatureFinderOptimiser(ConfigurationOptimiser):
                                       ('intensity_percentage', 0), ('intensity_percentage_optional', 0),
                                       ('optional_fit_improvement', 0), ('mass_window_width', 0),
                                       ('abundance_12C', 0), ('abundance_14N', 0),
-                                      ('min_score', 0), ('epsilon_abs', 0),
+                                      ('min_score', 0), ('epsilon_abs', 0), ('epsilon_rel', 0),
                                       ('min_score', 1), ('min_isotope_fit', 0), ('min_trace_score', 0),
                                       ('min_rt_span', 0), ('max_rt_span', 0), ('max_intersection', 0)]
         self.working_ini_file = WORKING_INI_FFC_FILE
