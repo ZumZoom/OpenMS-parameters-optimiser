@@ -101,6 +101,7 @@ def get_data_to_delete(file_name):
     features_to_delete = set()
 
     for feature in root.iter('feature'):
+        feature_name = feature.get("id")
         local_peptides = set()
         good_feature = True
         peptides_count = 0
