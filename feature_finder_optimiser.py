@@ -21,7 +21,7 @@ class FeatureFinderOptimiser(ConfigurationOptimiser):
                                       ('min_rt_span', 0), ('max_rt_span', 0), ('max_intersection', 0)]
         self.working_ini_file = WORKING_INI_FFC_FILE
         self.ini_to_save = SAVED_INI_FFC_FILE
-        self.dom = xml.dom.minidom.parse(config.ffcini)
+        self.dom = xml.dom.minidom.parse(SAVED_INI_FFC_FILE)
 
     def get_args(self, i=0):
         return self.config.ffc, '-in', self.config.mzml[i], '-out', str(i)+'_'+DEFAULT_FFC_OUTPUT_FILE, \

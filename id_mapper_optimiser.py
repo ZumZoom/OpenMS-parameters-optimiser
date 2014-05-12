@@ -12,7 +12,7 @@ class IDMapperOptimiser(ConfigurationOptimiser):
         self.optimisation_elements = [('rt_tolerance', 0), ('mz_tolerance', 0)]
         self.working_ini_file = WORKING_INI_IDM_FILE
         self.ini_to_save = SAVED_INI_IDM_FILE
-        self.dom = xml.dom.minidom.parse(config.idmini)
+        self.dom = xml.dom.minidom.parse(SAVED_INI_IDM_FILE)
 
     def get_args(self, i=0):
         return (self.config.idm, '-in', str(i)+'_'+DEFAULT_FFC_OUTPUT_FILE, '-out', DEFAULT_IDM_OUTPUT_FILE, '-id',

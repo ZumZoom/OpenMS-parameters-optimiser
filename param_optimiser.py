@@ -1,4 +1,5 @@
 import argparse
+import shutil
 from feature_finder_optimiser import FeatureFinderOptimiser
 from id_mapper_optimiser import IDMapperOptimiser
 from constants import *
@@ -29,6 +30,9 @@ def main():
     opt = FeatureFinderOptimiser(config)
     opt1 = IDMapperOptimiser(config)
 
+    shutil.copy(config.ffcini, SAVED_INI_FFC_FILE)
+    shutil.copy(config.idmini, SAVED_INI_IDM_FILE)
+
     # opt.write_config(opt.working_ini_file)
     # output = opt.run_program()
     # res = opt.get_result(output)
@@ -36,9 +40,7 @@ def main():
 
     while True:
         opt.run()
-        opt1.config.ffcini = SAVED_INI_FFC_FILE
         opt1.run()
-        opt.config.idmini = SAVED_INI_IDM_FILE
 
 if __name__ == '__main__':
     main()
