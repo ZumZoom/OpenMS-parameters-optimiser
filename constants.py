@@ -9,3 +9,4 @@ WORKING_INI_IDM_FILE = 'id_mapper_custom.ini'
 SAVED_INI_FFC_FILE = 'save_ffc.ini'
 SAVED_INI_IDM_FILE = 'save_idm.ini'
 MAX_REC_DEPTH = 2
+EPS = 0.000001

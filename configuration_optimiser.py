@@ -30,6 +30,11 @@ class ConfigurationOptimiser():
                 return elem
 
     @staticmethod
+    def equal(a, b):
+        return abs(a - b) < EPS
+
+
+    @staticmethod
     def parse_restrictions(elem):
         elem_type = elem.getAttribute('type')
         restrictions = []
@@ -149,6 +154,8 @@ class ConfigurationOptimiser():
             val = low
             increased = False
             while val <= up:
+                if val in results:
+                    continue
                 self.set_attribute(name, 'value', val, offset)
                 self.write_config(self.working_ini_file)
                 print("Trying {} = {}...".format(name, val))
@@ -180,15 +187,15 @@ class ConfigurationOptimiser():
                     best_val = val
                     increased = True
 
-                    if self.get_element(name, offset).getAttribute('type') != 'int' and depth < MAX_REC_DEPTH:
-                        print("We need to go deeper with low = {}, high = {}, step = {}"
-                              "".format(max(val - step * 0.8, low + step / 5),
-                                        min(val + step * 0.8, up - step / 5), step / 5))
-                        log("We need to go deeper with low = {}, high = {}, step = {}"
-                            "".format(max(val - step * 0.8, low + step / 5),
-                                      min(val + step * 0.8, up - step / 5), step / 5))
-                        one_search(max(val - step * 0.8, low + step / 5), min(val + step * 0.8, up - step / 5),
-                                   step / 5, depth + 1)
+                    # if self.get_element(name, offset).getAttribute('type') != 'int' and depth < MAX_REC_DEPTH:
+                    #     print("We need to go deeper with low = {}, high = {}, step = {}"
+                    #           "".format(max(val - step * 0.8, low + step / 5),
+                    #                     min(val + step * 0.8, up - step / 5), step / 5))
+                    #     log("We need to go deeper with low = {}, high = {}, step = {}"
+                    #         "".format(max(val - step * 0.8, low + step / 5),
+                    #                   min(val + step * 0.8, up - step / 5), step / 5))
+                    #     one_search(max(val - step * 0.8, low + step / 5), min(val + step * 0.8, up - step / 5),
+                    #                step / 5, depth + 1)
                     # other_best = other
 
                 # print("Best = {} with value = {}".format(best_res, best_val))
@@ -198,10 +205,13 @@ class ConfigurationOptimiser():
 
             if increased and depth < MAX_REC_DEPTH:
                 print("We need to go deeper with low = {}, high = {}, step = {}"
-                      "".format(best_val - step * 0.8, best_val + step * 0.8, step / 5))
+                      "".format(max(best_val - step * 0.8, low + step / 5),
+                                min(best_val + step * 0.8, up - step / 5), step / 5))
                 log("We need to go deeper with low = {}, high = {}, step = {}"
-                    "".format(best_val - step * 0.8, best_val + step * 0.8, step / 5))
-                one_search(best_val - step * 0.8, best_val + step * 0.8, step / 5, depth + 1)
+                    "".format(max(best_val - step * 0.8, low + step / 5),
+                              min(best_val + step * 0.8, up - step / 5), step / 5))
+                one_search(max(best_val - step * 0.8, low + step / 5),
+                           min(best_val + step * 0.8, up - step / 5), step / 5, depth + 1)
 
         one_search(restrictions[0], restrictions[1], restrictions[2])
 
