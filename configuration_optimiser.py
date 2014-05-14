@@ -264,14 +264,19 @@ class ConfigurationOptimiser():
     def run(self):
         self.pre_loading()
 
+        best = 0
+
         for name, offset in self.optimisation_elements:
             try:
                 print("Optimising {}".format(name, offset))
                 log("Optimising {}".format(name, offset))
                 res, val = self.find_best_value(name, offset)
+                best = max(best, res)
                 print("Best {} = {} with value = {}".format(name, res, val))
                 log("Best {} = {} with value = {}".format(name, res, val))
                 self.write_config(self.ini_to_save)
             except Exception as e:
                 print("Can not find best value for {}: {}".format(name, e))
                 log("Can not find best value for {}: {}".format(name, e))
+
+        return best

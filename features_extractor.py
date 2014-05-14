@@ -159,17 +159,20 @@ def get_data_to_delete(file_name, clean=False, verbose=False):
     return features_to_delete, peptides_to_delete
 
 
-def features_extractor(out_file, id_file, feature_file):
+def features_extractor(out_file, id_file, feature_file, verbose=False):
     assert '.featureXML' in out_file
     assert '.idXML' in id_file
     assert '.featureXML' in feature_file
     start = time.time()
 
-    features_to_delete, peptides_to_delete = get_data_to_delete(out_file, True)
+    features_to_delete, peptides_to_delete = get_data_to_delete(out_file, True, verbose)
     features = {feature.get("id"): feature for feature in features_to_delete}
 
     print("Found features and peptides to delete, modified initial file")
     print("Elapsed {} seconds".format(time.time() - start))
+
+    if len(features_to_delete) == 0 and len(peptides_to_delete) == 0:
+        return False
 
 ####### save new features
 
@@ -232,8 +235,11 @@ def features_extractor(out_file, id_file, feature_file):
     print("New optimal.featureXML created")
     print("Elapsed {} seconds".format(time.time() - start))
 
+    return True
+
 if __name__ == '__main__':
     # argv[1] - готовый featureXML
     # argv[2] - исходный idXML
     # argv[3] - исходный featureXML
-    features_extractor(sys.argv[1], sys.argv[2], sys.argv[3])
+    while features_extractor(sys.argv[1], sys.argv[2], sys.argv[3], True):
+        continue

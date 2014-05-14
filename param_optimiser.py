@@ -37,9 +37,19 @@ def main():
     # res = opt.get_result(output)
     # print(res)
 
-    while True:
-        opt.run()
-        opt1.run()
+    best_opt = 0
+    best_opt1 = 0
+    increased = True
+    while increased:
+        increased = False
+        new_opt = opt.run()
+        new_opt1 = opt1.run()
+        if best_opt < new_opt:
+            best_opt = new_opt
+            increased = True
+        if best_opt1 < new_opt1:
+            best_opt1 = new_opt1
+            increased = True
 
 if __name__ == '__main__':
     main()
