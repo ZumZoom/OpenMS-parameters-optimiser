@@ -47,6 +47,8 @@ def main():
             if best_opt < new_opt:
                 best_opt = new_opt
                 increased = True
+        opt.write_config(WORKING_INI_IDM_FILE)
+        opt.run_program(opt.get_args(False))
         if not features_extractor(DEFAULT_IDM_OUTPUT_FILE, config.idxml, config.inf, True):
             break
 
