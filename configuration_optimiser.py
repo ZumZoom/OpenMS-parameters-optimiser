@@ -155,6 +155,7 @@ class ConfigurationOptimiser():
             increased = False
             while val <= up:
                 if val in results:
+                    val += step
                     continue
                 self.set_attribute(name, 'value', val, offset)
                 self.write_config(self.working_ini_file)
