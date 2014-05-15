@@ -241,5 +241,4 @@ if __name__ == '__main__':
     # argv[1] - готовый featureXML
     # argv[2] - исходный idXML
     # argv[3] - исходный featureXML
-    while features_extractor(sys.argv[1], sys.argv[2], sys.argv[3], True):
-        continue
+    features_extractor(sys.argv[1], sys.argv[2], sys.argv[3], True)
