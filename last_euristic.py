@@ -38,6 +38,7 @@ def main():
     shutil.copy(config.idmini, SAVED_INI_IDM_FILE)
 
     while True:
+        shutil.copy(config.idmini, SAVED_INI_IDM_FILE)
         opt = FinalOptimiser(config)
         best_opt = 0
         increased = True
